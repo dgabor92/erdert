@@ -10,6 +10,10 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\KamionController;
+use App\Http\Controllers\TeherautoController;
+use App\Http\Controllers\SzemelygepkocsiController;
+use App\Http\Controllers\VagonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +38,28 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::post("kamionok", [KamionController::class, "store"]);
+    Route::post("teherautok", [TeherautoController::class, "store"]);
+    Route::post("szemelygepkocsik", [SzemelygepkocsiController::class, "store"]);
+    Route::post("vagons", [VagonController::class, "store"]);
+    Route::put("kamionok", [KamionController::class, "update"]);
+    Route::put("teherautok", [TeherautoController::class, "update"]);
+    Route::put("szemelyautok", [SzemelygepkocsiController::class, "update"]);
+    Route::put("vagons", [VagonController::class, "update"]);
+    Route::delete("kamionok/{id}", [KamionController::class, "destroy"]);
+    Route::delete("teherauto/{id}", [TeherautoController::class, "destroy"]);
+    Route::delete("szemelyauto/{id}", [SzemelygepkocsiController::class, "destroy"]);
+    Route::delete("vagon/{id}", [VagonController::class, "destroy"]);
+    Route::get("allKamionok", [KamionController::class, "index"]);
+    Route::get("allTeherautok", [TeherautoController::class, "index"]);
+    Route::get("allSzemelygepkocsik", [SzemelygepkocsiController::class, "index"]);
+    Route::get("allVagons", [VagonController::class, "index"]);
+    // Route::get("getExcelExport", [ExportController::class, "getExcelExport"]);
+    Route::get("getAllUser", [UserController::class, "getAllUser"]);
+    Route::delete("deleteUser/{id}", [UserController::class, "destroy"]);
+    Route::post("addUser", [UserController::class, "addUser"]);
+    Route::put("updateUser", [UserController::class, "updateUser"]);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
