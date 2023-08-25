@@ -20,14 +20,24 @@ class UserSeeder extends Seeder
         User::truncate();
         \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $faker = \Faker\Factory::create();
+        $users = ['admin', 'beata', 'porta1'];
 
-        $password = Hash::make('password');
+        function createRole($user)
+        {
+            if ($user == 'admin' || $user == 'beata') {
+                return '1';
+            } else {
+                return '2';
+            }
+        }
 
-        User::create([
-            'name' => 'Admin',
-            'email' => 'super@admin.com',
-            'password' => $password,
-        ]);
+        foreach ($users as &$user) {
+            User::create([
+                'name' => ucfirst($user),
+                'email' => $user . '@erdert.com',
+                'password' => Hash::make('password'),
+                'role' => createRole($user),
+            ]);
+        }
     }
 }

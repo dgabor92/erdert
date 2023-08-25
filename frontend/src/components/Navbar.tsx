@@ -1,17 +1,10 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { User, logOut } from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { useMutation, QueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  // { name: "Team", href: "#", current: false },
-  // { name: "Projects", href: "#", current: false },
-  // { name: "Calendar", href: "#", current: false },
-];
 
 const queryClient = new QueryClient();
 
@@ -23,6 +16,24 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user }: NavbarProps) {
+  const navigation = [
+    { name: "Kezdőlap", href: "/home", current: true, visible: true },
+    { name: "Beléptetés", href: "/beleptetes", current: false, visible: true },
+    { name: "Kiléptetés", href: "/kileptetes", current: false, visible: true },
+    {
+      name: "Statisztika",
+      href: "/statisztika",
+      current: false,
+      visible: user?.role === 1 ? true : false,
+    },
+    {
+      name: "Új felhasználó",
+      href: "/new_user",
+      current: false,
+      visible: user?.role === 1 ? true : false,
+    },
+  ];
+
   const navigate = useNavigate();
   const logOutMutation = useMutation<void, AxiosResponse<unknown>>(logOut, {
     onSuccess: () => {
@@ -32,7 +43,7 @@ export default function Navbar({ user }: NavbarProps) {
   });
 
   return (
-    <Disclosure as="nav" className="bg-purple-800">
+    <Disclosure as="nav" className="bg-green-800">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -51,29 +62,26 @@ export default function Navbar({ user }: NavbarProps) {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <img className="h-10 w-auto" src="/erdert.png" alt="erdert" />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        onClick={() => navigate(item.href)}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer",
-                          "rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {navigation.map(
+                      (item) =>
+                        item.visible && (
+                          <button
+                            key={item.name}
+                            onClick={() => navigate(item.href)}
+                            className={`cursor-pointer px-3 py-2 rounded-md text-sm font-medium ${
+                              item.current
+                                ? "text-white bg-green-700"
+                                : "text-gray-300 hover:bg-green-600 hover:text-white"
+                            }`}
+                          >
+                            {item.name}
+                          </button>
+                        )
+                    )}
                   </div>
                 </div>
               </div>
