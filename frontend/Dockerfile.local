@@ -1,0 +1,12 @@
+FROM node:latest
+
+WORKDIR /var/www/html/erdert_frontend
+
+COPY package.json /var/www/html/erdert_frontend
+
+RUN npm install
+
+COPY . /var/www/html/erdert_frontend
+
+EXPOSE 5174
+CMD ["npm", "run", "dev"]

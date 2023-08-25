@@ -1,0 +1,54 @@
+FROM php
+
+COPY composer.lock composer.json /var/www/html/erdert_backend/
+# Install dependencies
+RUN apt-get update
+
+# Git
+RUN apt-get install -y git
+
+# Bash
+RUN apt-get install bash
+
+# Nginx
+RUN apt-get install -y nginx
+
+# Curl
+RUN apt-get install -y libcurl3-dev curl && docker-php-ext-install curl
+
+#Composer
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN chmod 0755 /usr/bin/composer
+
+# Node
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+
+# Zip
+RUN apt-get install -y libzip-dev zip && docker-php-ext-configure zip && docker-php-ext-install zip
+
+# GD
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
+RUN docker-php-ext-install gd
+
+# MySQL
+RUN apt-get install -y default-mysql-client && docker-php-ext-install pdo pdo_mysql mysqli
+
+# Clean up
+RUN apt-get clean
+RUN apt-get -y autoremove
+
+# create app directory
+WORKDIR /var/www/html/erdert_backend
+
+# COPY package.json /var/www/html/erdert/
+
+# RUN npm install
+
+COPY . /var/www/html/erdert_backend
+
+EXPOSE 8000
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
