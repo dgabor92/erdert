@@ -1,9 +1,28 @@
-import Dashboard from "./Dashboard";
-import { useState } from "react";
+import Dashboard from "../components/Dashboard";
+import { useGetUserQuery } from "../lib/api";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import KamionForm from "../components/Forms/KamionForm";
+import TeherAForm from "../components/Forms/TeherAForm";
+import SzemelyAForm from "../components/Forms/SzemelyAForm";
+import VagonForm from "../components/Forms/VagonForm";
 
-function Output() {
+function FirstSelection() {
+  const navigate = useNavigate();
+  const { data: user, isLoading, isError } = useGetUserQuery();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
+  if (!user) {
+    navigate("/login");
+  }
   const [kivalasztottElem, setKivalasztottElem] = useState<Number>(1);
-  const handleElemKattintas = (elem: number) => {
+  const handleClick = (elem: number) => {
     setKivalasztottElem(elem);
   };
 
@@ -30,7 +49,7 @@ function Output() {
                       ? elem.szin
                       : "hover:bg-green-600"
                   }`}
-                  onClick={() => handleElemKattintas(elem.id)}
+                  onClick={() => handleClick(elem.id)}
                 >
                   {elem.nev}
                 </li>
@@ -41,13 +60,14 @@ function Output() {
 
         {/* Jobb oldali sáv (2/3 rész) */}
         <div className="p-4 sm:w-full md:w-2/4">
-          {kivalasztottElem === 1 && <div>Tartalom az Elem 1-höz</div>}
-          {kivalasztottElem === 2 && <div>Tartalom az Elem 2-höz</div>}
-          {kivalasztottElem === 3 && <div>Tartalom az Elem 3-hoz</div>}
+          {kivalasztottElem === 1 && <KamionForm />}
+          {kivalasztottElem === 2 && <TeherAForm />}
+          {kivalasztottElem === 3 && <SzemelyAForm />}
+          {kivalasztottElem === 4 && <VagonForm />}
         </div>
       </div>
     </Dashboard>
   );
 }
 
-export default Output;
+export default FirstSelection;

@@ -5,8 +5,8 @@ import Welcome from "../pages/Welcome";
 import Signup from "../pages/Signup";
 import PrivateRoute from "./PrivateRoute";
 import Settings from "../pages/Settings";
-import FirstSelection from "../components/Input";
-import Output from "../components/Output";
+import FirstSelection from "../pages/Input";
+import Output from "../pages/Output";
 import Home from "../pages/Home";
 
 const NotFound = lazy(() => import("../pages/404"));

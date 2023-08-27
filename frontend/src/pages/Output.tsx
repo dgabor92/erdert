@@ -1,26 +1,7 @@
-import Dashboard from "./Dashboard";
-import { useGetUserQuery } from "../lib/api";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import KamionForm from "./Forms/KamionForm";
-import TeherAForm from "./Forms/TeherAForm";
-import SzemelyAForm from "./Forms/SzemelyAForm";
-import VagonForm from "./Forms/VagonForm";
+import Dashboard from "../components/Dashboard";
+import { useState } from "react";
 
-function FirstSelection() {
-  const navigate = useNavigate();
-  const { data: user, isLoading, isError } = useGetUserQuery();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  if (!user) {
-    navigate("/login");
-  }
+function Output() {
   const [kivalasztottElem, setKivalasztottElem] = useState<Number>(1);
   const handleElemKattintas = (elem: number) => {
     setKivalasztottElem(elem);
@@ -60,14 +41,13 @@ function FirstSelection() {
 
         {/* Jobb oldali sáv (2/3 rész) */}
         <div className="p-4 sm:w-full md:w-2/4">
-          {kivalasztottElem === 1 && <KamionForm />}
-          {kivalasztottElem === 2 && <TeherAForm />}
-          {kivalasztottElem === 3 && <SzemelyAForm />}
-          {kivalasztottElem === 4 && <VagonForm />}
+          {kivalasztottElem === 1 && <div>Tartalom az Elem 1-höz</div>}
+          {kivalasztottElem === 2 && <div>Tartalom az Elem 2-höz</div>}
+          {kivalasztottElem === 3 && <div>Tartalom az Elem 3-hoz</div>}
         </div>
       </div>
     </Dashboard>
   );
 }
 
-export default FirstSelection;
+export default Output;

@@ -1,21 +1,68 @@
 import Dashboard from "../components/Dashboard";
-import { useGetAllKamionsQuery } from "../lib/api";
+import DataTable from "../components/DataTable";
+import {
+  useGetAllKamionsQuery,
+  useGetAllTeherautoQuery,
+  useGetAllSzemelyautoQuery,
+  useGetAllVagonQuery,
+} from "../lib/api";
 
 function Home() {
-  const { data: kamions, isLoading, isError } = useGetAllKamionsQuery();
-  if (isLoading) {
+  const {
+    data: kamions,
+    isLoading: isLoadingKamion,
+    isError: isErrorKamion,
+  } = useGetAllKamionsQuery();
+  const {
+    data: teherautos,
+    isLoading: isLoadingTeherauto,
+    isError: isErrorTeherauto,
+  } = useGetAllTeherautoQuery();
+  const {
+    data: szemelyautos,
+    isLoading: isLoadingSzemelyauto,
+    isError: isErrorSzemelyauto,
+  } = useGetAllSzemelyautoQuery();
+  const {
+    data: vagons,
+    isLoading: isLoadingVagon,
+    isError: isErrorVagon,
+  } = useGetAllVagonQuery();
+
+  // handling errors or loadings
+  if (
+    isLoadingKamion ||
+    isLoadingTeherauto ||
+    isLoadingSzemelyauto ||
+    isLoadingVagon
+  ) {
     return <div>Loading...</div>;
   }
 
-  if (isError) {
+  if (isErrorKamion || isErrorTeherauto || isErrorSzemelyauto || isErrorVagon) {
     return <div>Error</div>;
   }
 
-  if (!kamions) {
+  // handling no data
+  if (
+    kamions?.length === 0 &&
+    teherautos?.length === 0 &&
+    szemelyautos?.length === 0 &&
+    vagons?.length === 0
+  ) {
     return <div>No data</div>;
   }
 
-  return <Dashboard>Home</Dashboard>;
+  return (
+    <Dashboard>
+      <DataTable
+        kamions={kamions}
+        teherautos={teherautos}
+        szemelyautos={szemelyautos}
+        vagons={vagons}
+      />
+    </Dashboard>
+  );
 }
 
 export default Home;
