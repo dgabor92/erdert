@@ -10,7 +10,7 @@ const NotFoundPage: React.FC<{}> = () => {
       title="404"
       subTitle="Page not Found"
       extra={
-        <Button type="default" color="black" onClick={() => navigate("/")}>
+        <Button type="default" color="black" onClick={() => navigate("/home")}>
           Back Home
         </Button>
       }
