@@ -12,10 +12,20 @@ function DataTable({ kamions, teherautos, szemelyautos, vagons }) {
   };
 
   const elemek = [
-    { id: 1, name: "kamion", szin: "bg-green-500 text-white" },
-    { id: 2, name: "teherauto", szin: "bg-green-500 text-white" },
-    { id: 3, name: "szemelyauto", szin: "bg-green-500 text-white" },
-    { id: 4, name: "vagon", szin: "bg-green-500 text-white" },
+    { id: 1, name: "kamion", szin: "bg-green-400 text-white", selected: true },
+    {
+      id: 2,
+      name: "teherauto",
+      szin: "bg-green-400 text-white",
+      selected: false,
+    },
+    {
+      id: 3,
+      name: "szemelyauto",
+      szin: "bg-green-400 text-white",
+      selected: false,
+    },
+    { id: 4, name: "vagon", szin: "bg-green-400 text-white", selected: false },
   ];
 
   const renderTable = () => {
@@ -38,7 +48,7 @@ function DataTable({ kamions, teherautos, szemelyautos, vagons }) {
       {/* Fejléc gombok */}
       <div>
         <div className="flex gap-4 sm:flex-col md:flex-row pb-2">
-          <div className="p-4 bg-green-700 rounded-md text-white h-fit sm:w-full">
+          <div className="p-4 bg-green-600 rounded-md text-white h-fit sm:w-full hover:bg-green500">
             {elemek.map((elem) => (
               <button
                 key={elem.id}
@@ -49,7 +59,7 @@ function DataTable({ kamions, teherautos, szemelyautos, vagons }) {
                 }`}
                 onClick={() => handleClick(elem.id)}
               >
-                {elem.name}
+                {elem.name.charAt(0).toUpperCase() + elem.name.slice(1)}
               </button>
             ))}
           </div>

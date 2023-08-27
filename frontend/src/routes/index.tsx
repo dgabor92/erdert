@@ -8,6 +8,7 @@ import Settings from "../pages/Settings";
 import FirstSelection from "../pages/Input";
 import Output from "../pages/Output";
 import Home from "../pages/Home";
+import Statistics from "../pages/Statistics";
 
 const NotFound = lazy(() => import("../pages/404"));
 
@@ -39,6 +40,10 @@ const routeList: RouteObject[] = [
   {
     path: "/kileptetes",
     element: <Output />,
+  },
+  {
+    path: "/statisztika",
+    element: <Statistics />,
   },
   {
     path: "*",
