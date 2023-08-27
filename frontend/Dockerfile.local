@@ -1,12 +1,39 @@
-FROM node:latest
+# FROM node:latest
 
+# WORKDIR /var/www/html/erdert_frontend
+
+# COPY package.json /var/www/html/erdert_frontend
+
+# RUN npm install
+
+# COPY . /var/www/html/erdert_frontend
+
+# EXPOSE 5174
+# COPY vite.config.ts /var/www/html/erdert_frontend/
+
+
+# CMD ["npm", "run", "preview"]
+
+FROM node:latest as BUILD_IMAGE
 WORKDIR /var/www/html/erdert_frontend
 
-COPY package.json /var/www/html/erdert_frontend
+COPY package.json .
 
 RUN npm install
 
-COPY . /var/www/html/erdert_frontend
+COPY . .
+
+RUN npm run build
+
+
+FROM node:18-alpine as PRODUCTION_IMAGE
+WORKDIR /var/www/html/erdert_frontend
+
+COPY --from=BUILD_IMAGE /var/www/html/erdert_frontend/dist /var/www/html/erdert_frontend/dist
 
 EXPOSE 5174
-CMD ["npm", "run", "dev"]
+
+COPY package.json .
+COPY vite.config.ts .
+RUN npm install typescript
+CMD ["npm", "run", "preview"]

@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile.local
+    container_name: erdert_frontend
+    stdin_open: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`app.localhost`)"
+    ports:
+      - 5174:5174
+    networks:
+      - traefik-public
+    command: npm run preview
+
+networks:
+  traefik-public:
+    external: true
