@@ -26,8 +26,19 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cannot delete your own account',
+                'status' => 403
+            ]);
+        }
         $user->delete();
-        return response()->json("Sikeres törlés");
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully',
+            'status' => 204
+        ]);
     }
 
     public function addUser(Request $request)
