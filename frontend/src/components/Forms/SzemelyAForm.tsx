@@ -1,39 +1,47 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-
-interface SzemelyAFormProps {
-  sofor_neve: string;
-  rendszam: string;
-  // szal_level_szama: string;
-  belepes_datuma: string;
-  // suly_ures: string;
-  // suly_tele: string;
-  megjegyzes: string;
-}
+import { SzemelyautoInput } from "../../lib/interfaces";
+import { createSzemelyauto, getAllSzemelyauto } from "../../lib/api";
 
 function SzemelyAForm() {
+  const queryClient = useQueryClient();
+  const szemelyaQuery = useQuery({
+    queryKey: ["szemelyautos"],
+    queryFn: getAllSzemelyauto,
+  });
+
+  const szemelyaMutation = useMutation(
+    (args: SzemelyautoInput) => {
+      return createSzemelyauto(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["szemelyautos"]);
+        setSzemelyAForm(initialValues);
+      },
+    }
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     for (const key in szemelyAForm) {
       if (szemelyAForm.hasOwnProperty(key)) {
         if (
-          szemelyAForm[key as keyof SzemelyAFormProps] === "" ||
-          szemelyAForm[key as keyof SzemelyAFormProps] === null
+          szemelyAForm[key as keyof SzemelyautoInput] === "" ||
+          szemelyAForm[key as keyof SzemelyautoInput] === null
         ) {
           alert("Minden mezőt ki kell tölteni!");
           return;
         }
       }
     }
+    await szemelyaMutation.mutateAsync(szemelyAForm);
   };
 
-  const initialValues: SzemelyAFormProps = {
+  const initialValues: SzemelyautoInput = {
     sofor_neve: "",
     rendszam: "",
-    // szal_level_szama: "",
     belepes_datuma: new Date().toISOString().substring(0, 10),
-    // suly_ures: "",
-    // suly_tele: "",
     megjegyzes: "",
   };
   const [szemelyAForm, setSzemelyAForm] = useState(initialValues);

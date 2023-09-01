@@ -1,4 +1,5 @@
 import React from "react";
+import { Kamion } from "../../lib/interfaces";
 
 interface KamionTableProps {
   kamions: Kamion[];
@@ -36,34 +37,42 @@ const KamionTable: React.FC<KamionTableProps> = ({ kamions }) => {
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
-        {kamions.map((kamion) => (
-          <tr key={kamion.id}>
+        {!kamions.length ? (
+          <tr>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.sofor_neve}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.rendszam}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.szal_level_szama}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.belepes_datuma}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.kilepes_datuma}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.suly_üres}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.suly_tele}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {kamion.megjegyzes}
+              Nincs adat
             </td>
           </tr>
-        ))}
+        ) : (
+          kamions.map((kamion) => (
+            <tr key={kamion.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.sofor_neve}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.rendszam}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.szal_level_szama}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.belepes_datuma}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.kilepes_datuma}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.suly_üres}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.suly_tele}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {kamion.megjegyzes}
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );

@@ -1,38 +1,50 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-
-interface TeherAFormProps {
-  sofor_neve: string;
-  rendszam: string;
-  szal_level_szama: string;
-  belepes_datuma: string;
-  suly_ures: number;
-  suly_tele: number;
-  megjegyzes: string;
-}
+import { TeherautoInput } from "../../lib/interfaces";
+import { getAllTeherauto, createTeherauto } from "../../lib/api";
 
 function TeherAForm() {
+  const queryClient = useQueryClient();
+  const teherQuery = useQuery({
+    queryKey: ["teherautos"],
+    queryFn: getAllTeherauto,
+  });
+
+  const teherMutation = useMutation(
+    (args: TeherautoInput) => {
+      return createTeherauto(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["teherautos"]);
+        setTeherAForm(initialValues);
+      },
+    }
+  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     for (const key in teheraForm) {
       if (teheraForm.hasOwnProperty(key)) {
         if (
-          teheraForm[key as keyof TeherAFormProps] === "" ||
-          teheraForm[key as keyof TeherAFormProps] === 0
+          teheraForm[key as keyof TeherautoInput] === "" ||
+          teheraForm[key as keyof TeherautoInput] === 0
         ) {
           alert("Minden mezőt ki kell tölteni!");
           return;
         }
       }
     }
+    await teherMutation.mutateAsync(teheraForm);
   };
 
-  const initialValues: TeherAFormProps = {
+  const initialValues: TeherautoInput = {
     sofor_neve: "",
     rendszam: "",
     szal_level_szama: "",
     belepes_datuma: new Date().toISOString().substring(0, 10),
-    suly_ures: 0,
+    suly_üres: 0,
     suly_tele: 0,
     megjegyzes: "",
   };
@@ -166,14 +178,14 @@ function TeherAForm() {
                 <div className="mt-2">
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                     <input
-                      type="text"
+                      type="number"
                       name="suly_ures"
                       id="suly_ures"
-                      value={teheraForm.suly_ures}
+                      value={teheraForm.suly_üres}
                       onChange={(e) =>
                         setTeherAForm({
                           ...teheraForm,
-                          suly_ures: parseInt(e.target.value),
+                          suly_üres: parseInt(e.target.value),
                         })
                       }
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -192,7 +204,7 @@ function TeherAForm() {
                 <div className="mt-2">
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                     <input
-                      type="text"
+                      type="number"
                       name="suly_tele"
                       id="suly_tele"
                       value={teheraForm.suly_tele}

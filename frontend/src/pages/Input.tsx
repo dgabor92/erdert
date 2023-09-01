@@ -1,5 +1,4 @@
 import Dashboard from "../components/Dashboard";
-import { useGetUserQuery } from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import KamionForm from "../components/Forms/KamionForm";
@@ -9,18 +8,6 @@ import VagonForm from "../components/Forms/VagonForm";
 
 function FirstSelection() {
   const navigate = useNavigate();
-  const { data: user, isLoading, isError } = useGetUserQuery();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  if (!user) {
-    navigate("/login");
-  }
   const [kivalasztottElem, setKivalasztottElem] = useState<Number>(1);
   const handleClick = (elem: number) => {
     setKivalasztottElem(elem);

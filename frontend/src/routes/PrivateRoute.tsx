@@ -1,12 +1,20 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
-import { useGetUserQuery } from "../lib/api";
+import { getUser } from "../lib/api";
 import FirstSelection from "../pages/Input";
+import { useQuery } from "@tanstack/react-query";
 
 const PrivateRoute: FC = () => {
   const navigate = useNavigate();
-  const { data: user, isLoading, isError } = useGetUserQuery();
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;

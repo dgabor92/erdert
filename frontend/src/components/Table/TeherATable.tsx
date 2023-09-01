@@ -1,4 +1,5 @@
 import React from "react";
+import { Teherauto } from "../../lib/interfaces";
 
 interface TeherATableProps {
   teherautos: Teherauto[];
@@ -36,34 +37,42 @@ const TeherATable: React.FC<TeherATableProps> = ({ teherautos }) => {
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
-        {teherautos.map((teherauto) => (
-          <tr key={teherauto.id}>
+        {!teherautos.length ? (
+          <tr>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.sofor_neve}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.rendszam}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.szal_level_szama}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.belepes_datuma}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.kilepes_datuma}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.suly_üres}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.suly_tele}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {teherauto.megjegyzes}
+              Nincs adat
             </td>
           </tr>
-        ))}
+        ) : (
+          teherautos.map((teherauto) => (
+            <tr key={teherauto.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.sofor_neve}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.rendszam}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.szal_level_szama}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.belepes_datuma}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.kilepes_datuma}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.suly_üres}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.suly_tele}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {teherauto.megjegyzes}
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );

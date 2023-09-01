@@ -1,41 +1,45 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-
-interface VagonFormProps {
-  // sofor_neve: string;
-  // rendszam: string;
-  // szal_level_szama: string;
-  vagon_szama: string;
-  belepes_datuma: string;
-  // suly_ures: string;
-  // suly_tele: string;
-  megjegyzes: string;
-}
+import { VagonInput } from "../../lib/interfaces";
+import { createVagon, getAllVagon } from "../../lib/api";
 
 function VagonForm() {
+  const queryClient = useQueryClient();
+  const vagonQuery = useQuery({
+    queryKey: ["vagons"],
+    queryFn: getAllVagon,
+  });
+  const vagonMutation = useMutation(
+    (args: VagonInput) => {
+      return createVagon(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["vagons"]);
+        setVagonForm(initialValues);
+      },
+    }
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     for (const key in vagonForm) {
       if (vagonForm.hasOwnProperty(key)) {
         if (
-          vagonForm[key as keyof VagonFormProps] === "" ||
-          vagonForm[key as keyof VagonFormProps] === null
+          vagonForm[key as keyof VagonInput] === "" ||
+          vagonForm[key as keyof VagonInput] === null
         ) {
           alert("Minden mező kitöltése kötelező!");
           return;
         }
       }
     }
+    await vagonMutation.mutateAsync(vagonForm);
   };
 
-  const initialValues: VagonFormProps = {
-    // sofor_neve: "",
-    // rendszam: "",
-    // szal_level_szama: "",
+  const initialValues: VagonInput = {
     vagon_szama: "",
     belepes_datuma: new Date().toISOString().substring(0, 10),
-    // suly_ures: "",
-    // suly_tele: "",
     megjegyzes: "",
   };
   const [vagonForm, setVagonForm] = useState(initialValues);

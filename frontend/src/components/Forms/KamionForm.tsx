@@ -1,38 +1,48 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-
-interface KamionFormProps {
-  sofor_neve: string;
-  rendszam: string;
-  szal_level_szama: string;
-  belepes_datuma: string;
-  suly_ures: number;
-  suly_tele: number;
-  megjegyzes: string;
-}
+import { createKamion, getAllKamions } from "../../lib/api";
+import { KamionInput } from "../../lib/interfaces";
 
 function KamionForm() {
+  const queryClient = useQueryClient();
+  const kamionQuery = useQuery({
+    queryKey: ["kamions"],
+    queryFn: getAllKamions,
+  });
+  const kamionMutation = useMutation(
+    (args: KamionInput) => {
+      return createKamion(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["kamions"]);
+        setKamionForm(initialValues);
+      },
+    }
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     for (const key in kamionForm) {
       if (kamionForm.hasOwnProperty(key)) {
         if (
-          kamionForm[key as keyof KamionFormProps] === "" ||
-          kamionForm[key as keyof KamionFormProps] === 0
+          kamionForm[key as keyof KamionInput] === "" ||
+          kamionForm[key as keyof KamionInput] === 0
         ) {
           alert("Minden mezőt ki kell tölteni!");
           return;
         }
       }
     }
+    await kamionMutation.mutateAsync(kamionForm);
   };
 
-  const initialValues: KamionFormProps = {
+  const initialValues: KamionInput = {
     sofor_neve: "",
     rendszam: "",
     szal_level_szama: "",
     belepes_datuma: new Date().toISOString().substring(0, 10),
-    suly_ures: 0,
+    suly_üres: 0,
     suly_tele: 0,
     megjegyzes: "",
   };
@@ -169,11 +179,11 @@ function KamionForm() {
                       type="number"
                       name="suly_ures"
                       id="suly_ures"
-                      value={kamionForm.suly_ures}
+                      value={kamionForm.suly_üres}
                       onChange={(e) =>
                         setKamionForm({
                           ...kamionForm,
-                          suly_ures: parseInt(e.target.value),
+                          suly_üres: parseInt(e.target.value),
                         })
                       }
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"

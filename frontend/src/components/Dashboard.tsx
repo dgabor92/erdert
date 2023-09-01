@@ -1,7 +1,8 @@
 import Navbar from "./Navbar";
-import { useGetUserQuery } from "../lib/api";
+import { getUser } from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -10,7 +11,14 @@ interface DashboardProps {
 function Dashboard({ children }: DashboardProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<string>("");
-  const { data: user, isLoading, isError } = useGetUserQuery();
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
   if (isLoading) {
     return <div>Loading...</div>;
   }
