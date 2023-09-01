@@ -8,6 +8,7 @@ import {
   getAllVagon,
   getExcelExport,
 } from "../lib/api";
+import StatisticTable from "../components/StatisticTable";
 
 function Statistics() {
   const handleExport = () => {
@@ -36,6 +37,12 @@ function Statistics() {
   return (
     <Dashboard>
       <button onClick={handleExport}>Excel-export</button>
+      <StatisticTable
+        kamions={kamions}
+        teherautos={teherautos}
+        szemelyautos={szemelyautos}
+        vagons={vagos}
+      />
     </Dashboard>
   );
 }

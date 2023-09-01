@@ -149,7 +149,7 @@ export const updateTeherauto = async (
 export const deleteTeherauto = async (
   id: number
 ): Promise<TeherautoDeleteResponse> => {
-  const response = await customAxios.delete(`/teherautok/${id}`);
+  const response = await customAxios.delete(`/teherauto/${id}`);
   return response.data;
 };
 
@@ -178,7 +178,7 @@ export const updateSzemelyauto = async (
 export const deleteSzemelyauto = async (
   id: number
 ): Promise<TeherautoDeleteResponse> => {
-  const response = await customAxios.delete(`/szemelygepkocsik/${id}`);
+  const response = await customAxios.delete(`/szemelyauto/${id}`);
   return response.data;
 };
 
@@ -203,6 +203,6 @@ export const updateVagon = async (vagon: VagonUpdateInput): Promise<Vagon> => {
 export const deleteVagon = async (
   id: number
 ): Promise<TeherautoDeleteResponse> => {
-  const response = await customAxios.delete(`/vagons/${id}`);
+  const response = await customAxios.delete(`/vagon/${id}`);
   return response.data;
 };
