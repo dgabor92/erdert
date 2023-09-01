@@ -9,6 +9,7 @@ import FirstSelection from "../pages/Input";
 import Output from "../pages/Output";
 import Home from "../pages/Home";
 import Statistics from "../pages/Statistics";
+import NewUser from "../pages/NewUser";
 
 const NotFound = lazy(() => import("../pages/404"));
 
@@ -44,6 +45,10 @@ const routeList: RouteObject[] = [
   {
     path: "/statisztika",
     element: <Statistics />,
+  },
+  {
+    path: "/new_user",
+    element: <NewUser />,
   },
   {
     path: "*",

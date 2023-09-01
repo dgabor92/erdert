@@ -9,6 +9,26 @@ export interface User {
   photo_url: string;
 }
 
+export interface UserInput {
+  name: string;
+  email: string;
+  role: number;
+  password: string;
+}
+
+export interface UserUpdateInput {
+  id: number;
+  name: string;
+  email: string;
+  role: number;
+}
+
+export type DeleteResponse = {
+  success: boolean;
+  message: string;
+  status: number;
+};
+
 export interface LoginResponse {
   token: string;
   token_type: string;
@@ -51,12 +71,6 @@ export interface KamionUpdateInput {
   megjegyzes: string;
 }
 
-export type KamionDeleteResponse = {
-  success: boolean;
-  message: string;
-  status: number;
-};
-
 export interface Teherauto {
   id: number;
   sofor_neve: string;
@@ -93,12 +107,6 @@ export interface TeherautoUpdateInput {
   megjegyzes: string;
 }
 
-export type TeherautoDeleteResponse = {
-  success: boolean;
-  message: string;
-  status: number;
-};
-
 export interface Szemelyauto {
   id: number;
   sofor_neve: string;
@@ -126,12 +134,6 @@ export interface SzemelyautoUpdateInput {
   megjegyzes: string;
 }
 
-export type SzemelyautoDeleteResponse = {
-  success: boolean;
-  message: string;
-  status: number;
-};
-
 export interface Vagon {
   id: number;
   vagon_szama: string;
@@ -155,9 +157,3 @@ export interface VagonUpdateInput {
   kilepes_datuma: string;
   megjegyzes: string;
 }
-
-export type VagonDeleteResponse = {
-  success: boolean;
-  message: string;
-  status: number;
-};

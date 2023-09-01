@@ -8,15 +8,14 @@ import {
   Szemelyauto,
   Vagon,
   KamionInput,
-  KamionDeleteResponse,
   KamionUpdateInput,
   TeherautoInput,
   TeherautoUpdateInput,
-  TeherautoDeleteResponse,
   SzemelyautoInput,
   SzemelyautoUpdateInput,
   VagonInput,
   VagonUpdateInput,
+  DeleteResponse,
 } from "./interfaces";
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -80,6 +79,11 @@ export const getAllUser = async (): Promise<User[]> => {
   return response.data;
 };
 
+export const deleteUser = async (id: number): Promise<DeleteResponse> => {
+  const response = await customAxios.delete(`/deleteUser/${id}`);
+  return response.data;
+};
+
 export const logOut = async (): Promise<void> => {
   localStorage.removeItem("token");
   const response = await customAxios.post("/logout");
@@ -117,9 +121,7 @@ export const updateKamion = async (
   return response.data;
 };
 
-export const deleteKamion = async (
-  id: number
-): Promise<KamionDeleteResponse> => {
+export const deleteKamion = async (id: number): Promise<DeleteResponse> => {
   const response = await customAxios.delete(`/kamionok/${id}`);
   return response.data;
 };
@@ -146,9 +148,7 @@ export const updateTeherauto = async (
   return response.data;
 };
 
-export const deleteTeherauto = async (
-  id: number
-): Promise<TeherautoDeleteResponse> => {
+export const deleteTeherauto = async (id: number): Promise<DeleteResponse> => {
   const response = await customAxios.delete(`/teherauto/${id}`);
   return response.data;
 };
@@ -177,7 +177,7 @@ export const updateSzemelyauto = async (
 
 export const deleteSzemelyauto = async (
   id: number
-): Promise<TeherautoDeleteResponse> => {
+): Promise<DeleteResponse> => {
   const response = await customAxios.delete(`/szemelyauto/${id}`);
   return response.data;
 };
@@ -200,9 +200,7 @@ export const updateVagon = async (vagon: VagonUpdateInput): Promise<Vagon> => {
   return response.data;
 };
 
-export const deleteVagon = async (
-  id: number
-): Promise<TeherautoDeleteResponse> => {
+export const deleteVagon = async (id: number): Promise<DeleteResponse> => {
   const response = await customAxios.delete(`/vagon/${id}`);
   return response.data;
 };
