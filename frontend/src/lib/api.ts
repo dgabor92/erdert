@@ -16,6 +16,7 @@ import {
   VagonInput,
   VagonUpdateInput,
   DeleteResponse,
+  UserInput,
 } from "./interfaces";
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -81,6 +82,11 @@ export const getAllUser = async (): Promise<User[]> => {
 
 export const deleteUser = async (id: number): Promise<DeleteResponse> => {
   const response = await customAxios.delete(`/deleteUser/${id}`);
+  return response.data;
+};
+
+export const addUser = async (user: UserInput): Promise<User> => {
+  const response = await customAxios.post("/addUser", user);
   return response.data;
 };
 
