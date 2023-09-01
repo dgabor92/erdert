@@ -44,7 +44,7 @@ function FirstSelection() {
               {elemek.map((elem) => (
                 <li
                   key={elem.id}
-                  className={`cursor-pointer p-2 rounded-md  ${
+                  className={`cursor-pointer p-2 rounded-md ${
                     kivalasztottElem === elem.id
                       ? elem.szin
                       : "hover:bg-green-600"
