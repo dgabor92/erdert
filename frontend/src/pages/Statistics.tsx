@@ -1,62 +1,41 @@
+import { useQuery } from "@tanstack/react-query";
 import Dashboard from "../components/Dashboard";
 import DataTable from "../components/DataTable";
-import {} from "../lib/api";
+import {
+  getAllKamions,
+  getAllSzemelyauto,
+  getAllTeherauto,
+  getAllVagon,
+  getExcelExport,
+} from "../lib/api";
 
 function Statistics() {
-  // const {
-  //   data: kamions,
-  //   isLoading: isLoadingKamion,
-  //   isError: isErrorKamion,
-  // } = useGetAllKamionsQuery();
-  // const {
-  //   data: teherautos,
-  //   isLoading: isLoadingTeherauto,
-  //   isError: isErrorTeherauto,
-  // } = useGetAllTeherautoQuery();
-  // const {
-  //   data: szemelyautos,
-  //   isLoading: isLoadingSzemelyauto,
-  //   isError: isErrorSzemelyauto,
-  // } = useGetAllSzemelyautoQuery();
-  // const {
-  //   data: vagons,
-  //   isLoading: isLoadingVagon,
-  //   isError: isErrorVagon,
-  // } = useGetAllVagonQuery();
+  const handleExport = () => {
+    getExcelExport();
+  };
+  const { data: kamions } = useQuery({
+    queryKey: ["kamions"],
+    queryFn: getAllKamions,
+    // initialData: [],
+  });
 
-  // // handling errors or loadings
-  // if (
-  //   isLoadingKamion ||
-  //   isLoadingTeherauto ||
-  //   isLoadingSzemelyauto ||
-  //   isLoadingVagon
-  // ) {
-  //   return <div>Loading...</div>;
-  // }
+  const { data: teherautos } = useQuery({
+    queryKey: ["teherautos"],
+    queryFn: getAllTeherauto,
+  });
 
-  // if (isErrorKamion || isErrorTeherauto || isErrorSzemelyauto || isErrorVagon) {
-  //   return <div>Error</div>;
-  // }
+  const { data: szemelyautos } = useQuery({
+    queryKey: ["szemelyautos"],
+    queryFn: getAllSzemelyauto,
+  });
 
-  // handling no data
-  // if (
-  //   kamions?.length === 0 &&
-  //   teherautos?.length === 0 &&
-  //   szemelyautos?.length === 0 &&
-  //   vagons?.length === 0
-  // ) {
-  //   return <div>No data</div>;
-  // }
-
+  const { data: vagos } = useQuery({
+    queryKey: ["vagons"],
+    queryFn: getAllVagon,
+  });
   return (
     <Dashboard>
-      <div>Excel-export</div>
-      {/* <DataTable
-        kamions={kamions}
-        teherautos={teherautos}
-        szemelyautos={szemelyautos}
-        vagons={vagons}
-      /> */}
+      <button onClick={handleExport}>Excel-export</button>
     </Dashboard>
   );
 }

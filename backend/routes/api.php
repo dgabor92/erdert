@@ -13,6 +13,7 @@ use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\KamionController;
 use App\Http\Controllers\TeherautoController;
 use App\Http\Controllers\SzemelygepkocsiController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\VagonController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,7 +56,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get("allTeherautok", [TeherautoController::class, "index"]);
     Route::get("allSzemelygepkocsik", [SzemelygepkocsiController::class, "index"]);
     Route::get("allVagons", [VagonController::class, "index"]);
-    Route::get("getExcelExport", [ExportController::class, "getExcelExport"]);
+    Route::get("excelExport", [ExportController::class, "getExcelExport"]);
     Route::get("getAllUser", [UserController::class, "getAllUser"]);
     Route::delete("deleteUser/{id}", [UserController::class, "destroy"]);
     Route::post("addUser", [UserController::class, "addUser"]);

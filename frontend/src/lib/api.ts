@@ -49,6 +49,21 @@ export const signUp = async (
   return response.data;
 };
 
+export const getExcelExport = async () => {
+  const response = await customAxios.get("/excelExport", {
+    responseType: "blob",
+  });
+  const blob = new Blob([response.data]);
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Erdért_Excel_" + new Date().toLocaleDateString() + ".xlsx";
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+};
+
 export const getUser = async (): Promise<User> => {
   const response = await customAxios.get("/user");
   if (response.status !== 200) {
