@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logOut } from "../lib/api";
@@ -17,40 +17,41 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user }: NavbarProps) {
+  const [kivalasztottElem, setKivalasztottElem] = useState<Number>(null);
   const navigation = [
     {
+      id: 1,
       name: "Kezdőlap",
       href: "/home",
       szin: "bg-green-500 text-white",
-      current: true,
       visible: true,
     },
     {
+      id: 2,
       name: "Beléptetés",
       href: "/beleptetes",
       szin: "bg-green-500 text-white",
-      current: false,
       visible: true,
     },
     {
+      id: 3,
       name: "Kiléptetés",
       href: "/kileptetes",
       szin: "bg-green-500 text-white",
-      current: false,
       visible: true,
     },
     {
+      id: 4,
       name: "Statisztika",
       href: "/statisztika",
       szin: "bg-green-500 text-white",
-      current: false,
       visible: user?.role === 1 ? true : false,
     },
     {
+      id: 5,
       name: "Új felhasználó",
       href: "/new_user",
       szin: "bg-green-500 text-white",
-      current: false,
       visible: user?.role === 1 ? true : false,
     },
   ];
@@ -63,8 +64,9 @@ export default function Navbar({ user }: NavbarProps) {
     },
   });
 
-  const handleClick = (href: string) => {
-    navigate(href);
+  const handleClick = (item) => {
+    setKivalasztottElem(item.id);
+    navigate(item.href);
   };
 
   return (
@@ -90,17 +92,17 @@ export default function Navbar({ user }: NavbarProps) {
                   <img className="h-10 w-auto" src="/erdert.png" alt="erdert" />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
+                  <div className="flex space-x-4 text-white">
                     {navigation.map(
                       (item) =>
                         item.visible && (
                           <button
-                            key={item.name}
-                            onClick={() => handleClick(item.href)}
-                            className={`cursor-pointer px-3 py-2 rounded-md text-sm font-medium  ${
-                              item.current
-                                ? item.szin
-                                : "text-white hover:bg-green-600"
+                            key={item.id}
+                            onClick={() => handleClick(item)}
+                            className={`cursor-pointer p-2 rounded-md ${
+                              kivalasztottElem === item.id
+                                ? `${item.szin} text-white`
+                                : "hover:bg-green-600"
                             }`}
                           >
                             {item.name}
