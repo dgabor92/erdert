@@ -36,7 +36,15 @@ function Statistics() {
   });
   return (
     <Dashboard>
-      <button onClick={handleExport}>Excel-export</button>
+      <div className="flex mb-2">
+        <button
+          className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hidden sm:inline-block"
+          onClick={handleExport}
+        >
+          Excel-export
+        </button>
+      </div>
+
       <StatisticTable
         kamions={kamions}
         teherautos={teherautos}
