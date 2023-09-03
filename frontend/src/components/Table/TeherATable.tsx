@@ -1,8 +1,10 @@
 import React from "react";
-import { Teherauto } from "../../lib/interfaces";
+import { Teherauto, TeherautoUpdateInput } from "../../lib/interfaces";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTeherauto } from "../../lib/api";
+import { deleteTeherauto, updateTeherauto } from "../../lib/api";
+import EditTeherAModal from "../Modal/EditTeherAModal";
+import { notification } from "antd";
 
 interface TeherATableProps {
   teherautos: Teherauto[];
@@ -26,6 +28,36 @@ const TeherATable: React.FC<TeherATableProps> = ({ teherautos, stat }) => {
     if (window.confirm("Biztosan törölni szeretnéd?"))
       deleteMutation.mutateAsync(id);
   };
+
+  const [editingTeherAId, setEditingTeherAId] = React.useState(null);
+  const handleEditClick = (teherAId: number) => {
+    setEditingTeherAId(teherAId);
+  };
+
+  const handleCancelTeherAEdit = () => {
+    setEditingTeherAId(null);
+  };
+  const teherAMutation = useMutation(
+    (args: TeherautoUpdateInput) => {
+      return updateTeherauto(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["teherautos"]);
+      },
+    }
+  );
+
+  const handleSaveTeherA = async (editedTeherA) => {
+    await teherAMutation.mutateAsync(editedTeherA);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A teherautó sikeresen módosítva!",
+      placement: "topRight",
+    });
+    setEditingTeherAId(null);
+  };
+
   return (
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50">
@@ -97,7 +129,10 @@ const TeherATable: React.FC<TeherATableProps> = ({ teherautos, stat }) => {
               </td>
               {stat === true && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <button className="text-green-600 hover:text-indigo-900">
+                  <button
+                    className="text-green-600 hover:text-indigo-900"
+                    onClick={() => handleEditClick(teherauto.id)}
+                  >
                     <PencilIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <button
@@ -106,6 +141,14 @@ const TeherATable: React.FC<TeherATableProps> = ({ teherautos, stat }) => {
                   >
                     <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
+
+                  {editingTeherAId === teherauto.id && (
+                    <EditTeherAModal
+                      teherauto={teherauto}
+                      onSave={handleSaveTeherA}
+                      onCancel={handleCancelTeherAEdit}
+                    />
+                  )}
                 </td>
               )}
             </tr>
