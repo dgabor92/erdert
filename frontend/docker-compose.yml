@@ -8,7 +8,7 @@ services:
     stdin_open: true
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`portal.erdert.dndnew.hu`)"
+      - "traefik.http.routers.app.rule=Host(`erdert.dndnew.hu`)"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls.certresolver=myresolver"
     ports:
