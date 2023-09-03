@@ -17,19 +17,6 @@ services:
             - .env.production
         networks:
             - traefik-public
-        depends_on:
-            - mysql
-    mysql:
-        image: mysql
-        container_name: erdert_db
-        restart: unless-stopped
-        env_file: ./mysql.env
-        ports:
-            - 3307:3306
-        volumes:
-            - ./docker/data/mysql:/var/lib/mysql
-        networks:
-            - traefik-public
 
 networks:
     traefik-public:
