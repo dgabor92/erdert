@@ -1,8 +1,10 @@
-import React from "react";
-import { Vagon } from "../../lib/interfaces";
+import React, { useState } from "react";
+import { Vagon, VagonUpdateInput } from "../../lib/interfaces";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteVagon } from "../../lib/api";
+import { deleteVagon, updateVagon } from "../../lib/api";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import EditVagonModal from "../Modal/EditVagonModal";
+import { notification } from "antd";
 
 interface VagonTableProps {
   vagons: Vagon[];
@@ -25,6 +27,36 @@ const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
   const handleDelete = (id: number) => () => {
     if (window.confirm("Biztosan törölni szeretnéd?"))
       deleteMutation.mutateAsync(id);
+  };
+
+  const [editingVagonId, setEditingVagonId] = useState(null);
+  const handleEditClick = (vagonId: number) => {
+    setEditingVagonId(vagonId);
+  };
+
+  const handleCancelVagonEdit = () => {
+    setEditingVagonId(null);
+  };
+
+  const vagonMutation = useMutation(
+    (args: VagonUpdateInput) => {
+      return updateVagon(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["vagons"]);
+      },
+    }
+  );
+
+  const handleSaveVagon = async (editedVagon) => {
+    await vagonMutation.mutateAsync(editedVagon);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A vagon sikeresen módosítva!",
+      placement: "topRight",
+    });
+    setEditingVagonId(null);
   };
 
   return (
@@ -74,7 +106,10 @@ const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
               </td>
               {stat === true && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <button className="text-green-600 hover:text-indigo-900">
+                  <button
+                    className="text-green-600 hover:text-indigo-900"
+                    onClick={() => handleEditClick(vagon.id)}
+                  >
                     <PencilIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <button
@@ -83,6 +118,14 @@ const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
                   >
                     <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
+
+                  {editingVagonId === vagon.id && (
+                    <EditVagonModal
+                      vagon={vagon}
+                      onSave={handleSaveVagon}
+                      onCancel={handleCancelVagonEdit}
+                    />
+                  )}
                 </td>
               )}
             </tr>
