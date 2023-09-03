@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import KamionTable from "./Table/KamionTable";
-import TeherATable from "./Table/TeherATable";
-import SzemelyATable from "./Table/SzemelyATable";
-import VagonTable from "./Table/VagonTable";
+import KamionTable from "./KamionTable";
+import TeherATable from "./TeherATable";
+import SzemelyATable from "./SzemelyATable";
+import VagonTable from "./VagonTable";
 
 function StatisticTable({ kamions, teherautos, szemelyautos, vagons }) {
   const [selectedCategory, setSelectedCategory] = useState<Number>(1);

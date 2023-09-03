@@ -8,7 +8,7 @@ import {
   getAllVagon,
   getExcelExport,
 } from "../lib/api";
-import StatisticTable from "../components/StatisticTable";
+import StatisticTable from "../components/Table/StatisticTable";
 
 function Statistics() {
   const handleExport = () => {

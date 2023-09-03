@@ -9,9 +9,10 @@ import { notification } from "antd";
 interface VagonTableProps {
   vagons: Vagon[];
   stat?: boolean;
+  output?: boolean;
 }
 
-const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
+const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat, output }) => {
   const queryClient = useQueryClient();
   const deleteMutation = useMutation(
     (args: number) => {
@@ -80,6 +81,11 @@ const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
               Actions
             </th>
           )}
+          {output === true && (
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          )}
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -118,6 +124,30 @@ const VagonTable: React.FC<VagonTableProps> = ({ vagons, stat }) => {
                   >
                     <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
+
+                  {editingVagonId === vagon.id && (
+                    <EditVagonModal
+                      vagon={vagon}
+                      onSave={handleSaveVagon}
+                      onCancel={handleCancelVagonEdit}
+                    />
+                  )}
+                </td>
+              )}
+              {output === true && (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <button
+                    className="text-green-600 hover:text-indigo-900"
+                    onClick={() => handleEditClick(vagon.id)}
+                  >
+                    <PencilIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                  {/* <button
+                    className="text-red-600 hover:text-red-900 ml-4"
+                    onClick={handleDelete(kamion.id)}
+                  >
+                    <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                  </button> */}
 
                   {editingVagonId === vagon.id && (
                     <EditVagonModal
