@@ -1,8 +1,10 @@
-import React from "react";
-import { Kamion } from "../../lib/interfaces";
+import React, { useState } from "react";
+import { Kamion, KamionUpdateInput } from "../../lib/interfaces";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { deleteKamion } from "../../lib/api";
+import { deleteKamion, updateKamion } from "../../lib/api";
+import EditKamionModal from "../Modal/EditKamionModal";
+import { notification } from "antd";
 interface KamionTableProps {
   kamions: Kamion[];
   stat?: boolean;
@@ -25,6 +27,34 @@ const KamionTable: React.FC<KamionTableProps> = ({ kamions, stat }) => {
     if (window.confirm("Biztosan törölni szeretnéd?"))
       deleteMutation.mutateAsync(id);
   };
+
+  const [editingKamionId, setEditingKamionId] = useState(null);
+  const handleEditClick = (kamionId: number) => {
+    setEditingKamionId(kamionId);
+  };
+  const handleCancelKamionEdit = () => {
+    setEditingKamionId(null);
+  };
+  const kamionMutation = useMutation(
+    (args: KamionUpdateInput) => {
+      return updateKamion(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["kamions"]);
+      },
+    }
+  );
+  const handleSaveKamion = async (editedKamion) => {
+    await kamionMutation.mutateAsync(editedKamion);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A kamion sikeresen módosítva!",
+      placement: "topRight",
+    });
+    setEditingKamionId(null);
+  };
+
   return (
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50">
@@ -96,7 +126,10 @@ const KamionTable: React.FC<KamionTableProps> = ({ kamions, stat }) => {
               </td>
               {stat === true && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <button className="text-green-600 hover:text-indigo-900">
+                  <button
+                    className="text-green-600 hover:text-indigo-900"
+                    onClick={() => handleEditClick(kamion.id)}
+                  >
                     <PencilIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <button
@@ -105,6 +138,14 @@ const KamionTable: React.FC<KamionTableProps> = ({ kamions, stat }) => {
                   >
                     <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
+
+                  {editingKamionId === kamion.id && (
+                    <EditKamionModal
+                      kamion={kamion}
+                      onSave={handleSaveKamion}
+                      onCancel={handleCancelKamionEdit}
+                    />
+                  )}
                 </td>
               )}
             </tr>
