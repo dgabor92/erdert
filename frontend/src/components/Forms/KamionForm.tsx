@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { createKamion, getAllKamions } from "../../lib/api";
+import { notification } from "antd";
 import { KamionInput } from "../../lib/interfaces";
 
 function KamionForm() {
@@ -35,6 +36,12 @@ function KamionForm() {
       }
     }
     await kamionMutation.mutateAsync(kamionForm);
+
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A kamion sikeresen mentve lett!",
+      placement: "topRight",
+    });
   };
 
   const initialValues: KamionInput = {

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { UserInput } from "../../lib/interfaces";
 import { addUser } from "../../lib/api";
+import { notification } from "antd";
 
 function AddUserForm() {
   const initialValues: UserInput = {
@@ -38,6 +39,11 @@ function AddUserForm() {
       }
     }
     await userMutation.mutateAsync(userForm);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A felhasználó sikeresen hozzáadva!",
+      placement: "topRight",
+    });
   };
   return (
     <form onSubmit={handleSubmit} className="grid gap-2">

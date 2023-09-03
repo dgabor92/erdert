@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { VagonInput } from "../../lib/interfaces";
+import { notification } from "antd";
 import { createVagon, getAllVagon } from "../../lib/api";
 
 function VagonForm() {
@@ -35,6 +36,11 @@ function VagonForm() {
       }
     }
     await vagonMutation.mutateAsync(vagonForm);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A vagon sikeresen hozzáadva!",
+      placement: "topRight",
+    });
   };
 
   const initialValues: VagonInput = {

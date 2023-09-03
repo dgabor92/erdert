@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { TeherautoInput } from "../../lib/interfaces";
+import { notification } from "antd";
 import { getAllTeherauto, createTeherauto } from "../../lib/api";
 
 function TeherAForm() {
@@ -37,6 +38,12 @@ function TeherAForm() {
       }
     }
     await teherMutation.mutateAsync(teheraForm);
+
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A teherautó sikeresen hozzáadva!",
+      placement: "topRight",
+    });
   };
 
   const initialValues: TeherautoInput = {

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { SzemelyautoInput } from "../../lib/interfaces";
 import { createSzemelyauto, getAllSzemelyauto } from "../../lib/api";
+import { notification } from "antd";
 
 function SzemelyAForm() {
   const queryClient = useQueryClient();
@@ -36,6 +37,12 @@ function SzemelyAForm() {
       }
     }
     await szemelyaMutation.mutateAsync(szemelyAForm);
+
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A személyautó sikeresen hozzáadva!",
+      placement: "topRight",
+    });
   };
 
   const initialValues: SzemelyautoInput = {
