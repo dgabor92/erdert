@@ -172,15 +172,13 @@ export default function Navbar({ user }: NavbarProps) {
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
                 <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? item.szin
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
+                  key={item.id}
+                  onClick={() => handleClick(item)}
+                  className={`cursor-pointer p-2 rounded-md ${
+                    kivalasztottElem === item.id
+                      ? `${item.szin} text-white`
+                      : "hover:bg-green-600"
+                  }`}
                 >
                   {item.name}
                 </Disclosure.Button>
