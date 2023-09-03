@@ -3,6 +3,7 @@ import { User, UserUpdateInput } from "../../lib/interfaces";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, updateUser } from "../../lib/api";
+import { notification } from "antd";
 import EditUserModal from "../Modal/EditUserModal";
 
 interface UserTableProps {
@@ -47,6 +48,11 @@ const UserTable: React.FC<UserTableProps> = ({ users, stat }) => {
   );
   const handleSaveEdit = async (editedUser) => {
     await userMutation.mutateAsync(editedUser);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A felhasználó sikeresen módosítva!",
+      placement: "topRight",
+    });
     setEditingUserId(null);
   };
 
