@@ -1,8 +1,10 @@
-import React from "react";
-import { Szemelyauto } from "../../lib/interfaces";
+import React, { useState } from "react";
+import { Szemelyauto, SzemelyautoUpdateInput } from "../../lib/interfaces";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteSzemelyauto } from "../../lib/api";
+import { deleteSzemelyauto, updateSzemelyauto } from "../../lib/api";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import EditSzemelyAModal from "../Modal/EditSzemelyAModal";
+import { notification } from "antd";
 
 interface SzemelyATableProps {
   szemelyautos: Szemelyauto[];
@@ -28,6 +30,35 @@ const SzemelyATable: React.FC<SzemelyATableProps> = ({
   const handleDelete = (id: number) => () => {
     if (window.confirm("Biztosan törölni szeretnéd?"))
       deleteMutation.mutateAsync(id);
+  };
+
+  const [editingSzemelyAId, setEditingSzemelyAId] = useState(null);
+  const handleEditClick = (szemelyAId: number) => {
+    setEditingSzemelyAId(szemelyAId);
+  };
+
+  const handleCancelSzemelyAEdit = () => {
+    setEditingSzemelyAId(null);
+  };
+  const szemelyAMutation = useMutation(
+    (args: SzemelyautoUpdateInput) => {
+      return updateSzemelyauto(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["szemelyautos"]);
+      },
+    }
+  );
+
+  const handleSaveSzemelyA = async (editedSzemelyA) => {
+    await szemelyAMutation.mutateAsync(editedSzemelyA);
+    notification.success({
+      message: "Sikeres mentés",
+      description: "A személyautó sikeresen módosítva!",
+      placement: "topRight",
+    });
+    setEditingSzemelyAId(null);
   };
 
   return (
@@ -83,7 +114,10 @@ const SzemelyATable: React.FC<SzemelyATableProps> = ({
               </td>
               {stat === true && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <button className="text-green-600 hover:text-indigo-900">
+                  <button
+                    className="text-green-600 hover:text-indigo-900"
+                    onClick={() => handleEditClick(szemelyauto.id)}
+                  >
                     <PencilIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <button
@@ -92,6 +126,14 @@ const SzemelyATable: React.FC<SzemelyATableProps> = ({
                   >
                     <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
+
+                  {editingSzemelyAId === szemelyauto.id && (
+                    <EditSzemelyAModal
+                      szemelyauto={szemelyauto}
+                      onSave={handleSaveSzemelyA}
+                      onCancel={handleCancelSzemelyAEdit}
+                    />
+                  )}
                 </td>
               )}
             </tr>
